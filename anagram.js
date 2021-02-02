@@ -22,7 +22,6 @@ function getAnagramIndexs(A) {
   for(let i = 0; i < A.length; i++) {
     const word = A[i]
     const worldId = sortString(word)
-    console.log(worldId)
     if (anagrams[worldId] && anagrams[worldId] !== null) {
       anagrams[worldId].push(i+1)
     } else {
@@ -33,7 +32,6 @@ function getAnagramIndexs(A) {
 }
 
 function sortString(string) {
-  // string are immutable
   string = string.split('')
   for(let i = 0; i < string.length - 1; i ++) {
     for(let j = 0; j < string.length - i - 1; j++) {
