@@ -17,34 +17,40 @@
 // / phrases within the group. Within a group containing A[i] and A[j], A[i] comes before A[j] if i < j.
 
 
-function getAnagramIndexs(A) {
-  const anagrams = {}
-  for(let i = 0; i < A.length; i++) {
-    const word = A[i]
-    const worldId = sortString(word)
-    if (anagrams[worldId] && anagrams[worldId] !== null) {
-      anagrams[worldId].push(i+1)
-    } else {
-      anagrams[worldId] = [i+1]
-    }
-  }
-  return Object.values(anagrams) 
+function getAnagramIndexes(anagramList) {
+  let anagramsObject  = {}
+  let count = 1
+
+  anagramsObject = update(anagramList, anagramsObject,  count)
+
+  return Object.values(anagramsObject)
 }
 
-function sortString(string) {
-  string = string.split('')
-  for(let i = 0; i < string.length - 1; i ++) {
-    for(let j = 0; j < string.length - i - 1; j++) {
-      if(string[j] > string[j + 1]) {
-        let temp = string[j + 1]
-        string[j + 1] = string[j]
-        string[j] = temp 
-      }
-    }
+function update(anagramList, anagramsObject, count) {
+
+  const updateObj = (key) => 
+    isValidAnagramKey(key, anagramsObject) ? 
+      anagramsObject[key].push(count++) : 
+      anagramsObject[key] = [count++]
+
+  for(let a of anagramList ) {
+    const key = sortAnagram(a)
+    updateObj(key)
   }
 
-  return string.join('')
+
+  return anagramsObject
 }
 
-console.log(getAnagramIndexs(['cat', 'dog', 'god', 'tca', 'cta', 'odg', 'full'])) 
-// [[1, 4, 5], [2, 3, 6], [7]]
+function isValidAnagramKey(key, anagramsObject) {
+ return anagramsObject[key] && anagramsObject[key] !== null
+}
+
+function sortAnagram(a) {
+ return a.split('').sort().join('')
+}
+
+
+
+console.log(getAnagramIndexes(['cat', 'tca', 'act', 'dog', 'god', 'rat'])) 
+// [ [ 1, 2, 3 ], [ 4, 5 ], [ 6 ] ]
